@@ -49,9 +49,10 @@ public class Client {
     private Integer phoneNumber;
 
     @NonNull
+    @Enumerated(value = EnumType.STRING)
     @NotBlank(message = "Role must not be empty")
     @Column(nullable = false)
-    private String role;
+    private Role role;
 
     @Column(name = "karma_score", nullable = false)
     private Integer karmaScore = 0;

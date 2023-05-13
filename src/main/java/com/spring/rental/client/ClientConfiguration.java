@@ -9,9 +9,7 @@ public class ClientConfiguration {
 
     @Bean
     CommandLineRunner commandLineRunner(ClientRepository clientRepository) {
-        return args -> {
-            clientRepository.save(new Client("ee@ee.ee", "pass123", "Eoo", "Bee", 123123123, "E"));
-        };
+        return args -> clientRepository.save(new Client("ee@ee.ee", "pass123", "Eoo", "Bee", 123123123, Role.REGULAR));
 
     }
 }
