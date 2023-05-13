@@ -1,8 +1,10 @@
 package com.spring.rental.client;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -50,14 +52,14 @@ public class Client {
 
     @NonNull
     @Enumerated(value = EnumType.STRING)
-    @NotBlank(message = "Role must not be empty")
+    @NotNull(message = "Role must not be empty")
     @Column(nullable = false)
     private Role role;
 
     @Column(name = "karma_score", nullable = false)
     private Integer karmaScore = 0;
 
-    @JsonIgnore
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @CreationTimestamp
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
