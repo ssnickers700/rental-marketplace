@@ -1,7 +1,10 @@
 package com.spring.rental.client;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.spring.rental.rental.Rental;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -12,6 +15,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @ToString
 @Setter
@@ -19,7 +23,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Entity
-@Table(name = "client")
+@Table(name = "client", uniqueConstraints = {@UniqueConstraint(name = "client_email_unique", columnNames = "email")})
 public class Client {
     @Id
     @SequenceGenerator(name = "client_sequence", sequenceName = "client_sequence", allocationSize = 1)
@@ -28,10 +32,11 @@ public class Client {
 
     @NonNull
     @NotBlank(message = "Email must not be empty")
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String email;
 
     @NonNull
+    @JsonIgnore
     @NotBlank(message = "Password must not be empty")
     @Column(nullable = false)
     private String password;
@@ -58,6 +63,14 @@ public class Client {
 
     @Column(name = "karma_score", nullable = false)
     private Integer karmaScore = 0;
+
+    @JsonBackReference
+    @OneToMany(mappedBy = "renter", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private List<Rental> rentalsAsRenter;
+
+    @JsonBackReference
+    @OneToMany(mappedBy = "rentee", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private List<Rental> rentalsAsRentee;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @CreationTimestamp
