@@ -3,6 +3,7 @@ package com.spring.rental.rental;
 import com.spring.rental.client.Client;
 import com.spring.rental.client.ClientRepository;
 import com.spring.rental.exception.NotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,6 +50,7 @@ public class RentalService {
         return rentalRepository.save(rental);
     }
 
+    @Transactional
     public Rental updateRental(Long id, Rental updatedRental) {
         Rental currentRental = rentalRepository.findById(id).orElseThrow(() -> new NotFoundException("rental", id));
         updatedRental.setId(id);

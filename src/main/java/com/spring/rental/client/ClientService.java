@@ -1,6 +1,7 @@
 package com.spring.rental.client;
 
 import com.spring.rental.exception.NotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,7 @@ public class ClientService {
         return clientRepository.save(client);
     }
 
+    @Transactional
     public Client updateClient(Long id, Client updatedClient) {
         if (!clientRepository.existsById(id)) {
             throw new NotFoundException("client", id);
