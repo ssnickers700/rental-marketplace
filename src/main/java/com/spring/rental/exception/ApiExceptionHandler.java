@@ -1,5 +1,6 @@
 package com.spring.rental.exception;
 
+import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -19,9 +20,9 @@ public class ApiExceptionHandler {
 
         ApiException apiException = new ApiException(
                 e.getMessage(),
-                e,
                 HttpStatus.BAD_REQUEST,
-                ZonedDateTime.now()
+                ZonedDateTime.now(),
+                e
         );
         return new ResponseEntity<>(apiException, HttpStatus.BAD_REQUEST);
     }
@@ -31,10 +32,22 @@ public class ApiExceptionHandler {
 
         ApiException apiException = new ApiException(
                 e.getMessage(),
-                e,
                 HttpStatus.NOT_FOUND,
-                ZonedDateTime.now()
+                ZonedDateTime.now(),
+                e
         );
         return new ResponseEntity<>(apiException, HttpStatus.NOT_FOUND );
+    }
+
+    @ExceptionHandler(value = ConstraintViolationException.class)
+    public ResponseEntity<Object> handleValidationException(ConstraintViolationException e) {
+
+        ApiException apiException = new ApiException(
+                e.getMessage(),
+                HttpStatus.BAD_REQUEST,
+                ZonedDateTime.now(),
+                null
+        );
+        return new ResponseEntity<>(apiException, HttpStatus.BAD_REQUEST);
     }
 }

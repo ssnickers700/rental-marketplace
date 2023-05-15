@@ -1,9 +1,6 @@
 package com.spring.rental.client;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import com.spring.rental.rental.Rental;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -36,7 +33,7 @@ public class Client {
     private String email;
 
     @NonNull
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotBlank(message = "Password must not be empty")
     @Column(nullable = false)
     private String password;
@@ -64,11 +61,11 @@ public class Client {
     @Column(name = "karma_score", nullable = false)
     private Integer karmaScore = 0;
 
-    @JsonBackReference
+    @JsonIgnore
     @OneToMany(mappedBy = "renter", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<Rental> rentalsAsRenter;
 
-    @JsonBackReference
+    @JsonIgnore
     @OneToMany(mappedBy = "rentee", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<Rental> rentalsAsRentee;
 

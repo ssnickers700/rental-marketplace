@@ -31,8 +31,8 @@ public class RentalController {
     }
 
     @PostMapping
-    public ResponseEntity<Rental> createRental(@RequestBody Rental rental) {
-        Rental savedRental = rentalService.createRental(rental);
+    public ResponseEntity<Rental> createRental(@RequestBody RentalDTO rentalDTO) {
+        Rental savedRental = rentalService.createRental(rentalDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedRental);
     }
 

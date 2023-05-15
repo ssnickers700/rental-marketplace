@@ -3,6 +3,7 @@ package com.spring.rental.rental;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.spring.rental.client.Client;
 import jakarta.persistence.*;
 import lombok.*;
@@ -29,24 +30,24 @@ public class Rental {
 
     @NonNull
     @ManyToOne
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @JoinColumn(
             name = "renter_id",
             nullable = false,
             referencedColumnName = "id",
             foreignKey = @ForeignKey(name = "client_rental_renter_id_fk")
     )
-    @JsonManagedReference
     private Client renter;
 
     @NonNull
     @ManyToOne
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @JoinColumn(
             name = "rentee_id",
             nullable = false,
             referencedColumnName = "id",
             foreignKey = @ForeignKey(name = "client_rental_rentee_id_fk")
     )
-    @JsonManagedReference
     private Client rentee;
 
     @NonNull
