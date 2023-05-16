@@ -1,5 +1,7 @@
 package com.spring.rental.rental;
 
+import com.spring.rental.address.Address;
+import com.spring.rental.address.AddressRepository;
 import com.spring.rental.client.Client;
 import com.spring.rental.client.ClientRepository;
 import com.spring.rental.exception.NotFoundException;
@@ -14,11 +16,17 @@ public class RentalService {
 
     private final RentalRepository rentalRepository;
     private final ClientRepository clientRepository;
+    private final AddressRepository addressRepository;
 
     @Autowired
-    public RentalService(RentalRepository rentalRepository, ClientRepository clientRepository) {
+    public RentalService(
+            RentalRepository rentalRepository,
+            ClientRepository clientRepository,
+            AddressRepository addressRepository
+    ) {
         this.rentalRepository = rentalRepository;
         this.clientRepository = clientRepository;
+        this.addressRepository = addressRepository;
     }
 
     public List<Rental> getAllRentals() {
@@ -30,22 +38,29 @@ public class RentalService {
                 .orElseThrow(() -> new NotFoundException("rental", id));
     }
 
+    @Transactional
     public Rental createRental(RentalDTO rentalDTO) {
-        Client renter = clientRepository.findById(rentalDTO.getRenterId()).orElseThrow(
-                () -> new NotFoundException("client", rentalDTO.getRenterId())
+        Client renter = clientRepository.findById(rentalDTO.renterId()).orElseThrow(
+                () -> new NotFoundException("client", rentalDTO.renterId())
         );
-        Client rentee = clientRepository.findById(rentalDTO.getRenteeId()).orElseThrow(
-                () -> new NotFoundException("client", rentalDTO.getRenteeId())
+        Client rentee = clientRepository.findById(rentalDTO.renteeId()).orElseThrow(
+                () -> new NotFoundException("client", rentalDTO.renteeId())
+        );
+        Address renterAddress = addressRepository.findById(rentalDTO.renterAddressId()).orElseThrow(
+                () -> new NotFoundException("address", rentalDTO.renterAddressId())
+        );
+        Address renteeAddress = addressRepository.findById(rentalDTO.renteeAddressId()).orElseThrow(
+                () -> new NotFoundException("address", rentalDTO.renteeId())
         );
         Rental rental = new Rental(
                 renter,
                 rentee,
-                rentalDTO.getItemId(),
-                rentalDTO.getItemPriceId(),
-                rentalDTO.getRenterAddressId(),
-                rentalDTO.getRenteeAddressId(),
-                rentalDTO.getStatus(),
-                rentalDTO.getDeclaredEndDate()
+                rentalDTO.itemId(),
+                rentalDTO.itemPriceId(),
+                renterAddress,
+                renteeAddress,
+                rentalDTO.status(),
+                rentalDTO.declaredEndDate()
         );
         return rentalRepository.save(rental);
     }
@@ -56,8 +71,7 @@ public class RentalService {
         updatedRental.setId(id);
         updatedRental.setRentee(currentRental.getRentee());
         updatedRental.setRenter(currentRental.getRenter());
-        rentalRepository.save(updatedRental);
-        return updatedRental;
+        return rentalRepository.save(updatedRental);
     }
 
     public void deleteRental(Long id) {

@@ -3,6 +3,7 @@ package com.spring.rental.rental;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.spring.rental.address.Address;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.spring.rental.client.Client;
 import jakarta.persistence.*;
@@ -59,12 +60,26 @@ public class Rental {
     private Long itemPriceId;
 
     @NonNull
-    @Column(name = "renter_address_id", nullable = false)
-    private Long renterAddressId;
+    @ManyToOne
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JoinColumn(
+            name = "renter_address_id",
+            nullable = false,
+            referencedColumnName = "id",
+            foreignKey = @ForeignKey(name = "rental_renter_address_id_fk")
+    )
+    private Address renterAddress;
 
     @NonNull
-    @Column(name = "rentee_address_id", nullable = false)
-    private Long renteeAddressId;
+    @ManyToOne
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JoinColumn(
+            name = "rentee_address_id",
+            nullable = false,
+            referencedColumnName = "id",
+            foreignKey = @ForeignKey(name = "rental_rentee_address_id_fk")
+    )
+    private Address renteeAddress;
 
     @NonNull
     @Enumerated(EnumType.STRING)
