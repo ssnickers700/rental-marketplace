@@ -2,6 +2,7 @@ package com.spring.rental.client;
 
 import com.fasterxml.jackson.annotation.*;
 import com.spring.rental.address.Address;
+import com.spring.rental.item.Item;
 import com.spring.rental.rental.Rental;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -63,16 +64,20 @@ public class Client {
     private Integer karmaScore = 0;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "renter", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "renter", cascade = CascadeType.PERSIST)
     private List<Rental> rentalsAsRenter;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "rentee", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "rentee", cascade = CascadeType.PERSIST)
     private List<Rental> rentalsAsRentee;
 
     @JsonIgnore
     @OneToMany(mappedBy = "client", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<Address> addresses;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "client", cascade = CascadeType.PERSIST)
+    private List<Item> items;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @CreationTimestamp

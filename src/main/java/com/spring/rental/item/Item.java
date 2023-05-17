@@ -1,4 +1,4 @@
-package com.spring.rental.address;
+package com.spring.rental.item;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -12,6 +12,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -21,54 +23,47 @@ import java.util.List;
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Entity
-@Table(name = "address")
-public class Address {
-
+@Table(name = "item")
+public class Item {
     @Id
-    @SequenceGenerator(name = "address_sequence", sequenceName = "address_sequence", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "address_sequence")
+    @SequenceGenerator(name = "item_sequence", sequenceName = "item_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "item_sequence")
     private Long id;
 
     @NonNull
     @ManyToOne
     @JoinColumn(
-            name = "client_id",
+            name = "user_id",
             nullable = false,
             referencedColumnName = "id",
-            foreignKey = @ForeignKey(name = "address_client_id_fk")
+            foreignKey = @ForeignKey(name = "client_item_user_id_fk")
     )
     private Client client;
 
     @NonNull
-    @NotBlank(message = "Street must not be empty")
-    @Column(nullable = false)
-    private String street;
+    @NotBlank(message = "Title must not be empty")
+    @Column(name = "title", nullable = false)
+    private String title;
 
     @NonNull
-    @NotBlank(message = "City must not be empty")
-    @Column(nullable = false)
-    private String city;
+    @NotBlank(message = "Description must not be empty")
+    @Column(name = "description", nullable = false)
+    private String description;
 
     @NonNull
-    @NotBlank(message = "Postal code must not be empty")
-    @Column(name = "postal_code", nullable = false)
-    private String postalCode;
+    @Column(name = "base_price", nullable = false)
+    private BigDecimal basePrice;
 
-    @NonNull
-    @NotBlank(message = "Country must not be empty")
-    @Column(name = "country", nullable = false)
-    private String country;
+    @Column(name = "availability_deadline")
+    private LocalDate availabilityDeadline;
 
-    @Column(name = "note")
-    private String note;
+    @NotBlank(message = "Description must not be empty")
+    @Column(name = "item_state", nullable = false)
+    private String itemState;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "renterAddress", cascade = CascadeType.PERSIST)
-    private List<Rental> rentalsAsRenterAddress;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "renteeAddress", cascade = CascadeType.PERSIST)
-    private List<Rental> rentalsAsRenteeAddress;
+    @OneToMany(mappedBy = "item", cascade = CascadeType.PERSIST)
+    private List<Rental> rentals;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @CreationTimestamp

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.spring.rental.address.Address;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.spring.rental.client.Client;
+import com.spring.rental.item.Item;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -52,8 +53,15 @@ public class Rental {
     private Client rentee;
 
     @NonNull
-    @Column(name = "item_id", nullable = false)
-    private Long itemId;
+    @ManyToOne
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JoinColumn(
+            name = "item_id",
+            nullable = false,
+            referencedColumnName = "id",
+            foreignKey = @ForeignKey(name = "item_rental_id_fk")
+    )
+    private Item item;
 
     @NonNull
     @Column(name = "item_price_id", nullable = false)
