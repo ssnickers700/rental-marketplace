@@ -6,6 +6,7 @@ import com.spring.rental.client.Client;
 import com.spring.rental.rental.Rental;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -51,15 +52,18 @@ public class Item {
     private String description;
 
     @NonNull
+    @Enumerated(EnumType.STRING)
+    @NotNull(message = "State must not be empty")
+    @Column(name = "state", nullable = false)
+    private State state;
+
+    @NonNull
+    @NotNull(message = "Base price must not be empty")
     @Column(name = "base_price", nullable = false)
     private BigDecimal basePrice;
 
     @Column(name = "availability_deadline")
     private LocalDate availabilityDeadline;
-
-    @NotBlank(message = "Description must not be empty")
-    @Column(name = "item_state", nullable = false)
-    private String itemState;
 
     @JsonIgnore
     @OneToMany(mappedBy = "item", cascade = CascadeType.PERSIST)

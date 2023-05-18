@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.spring.rental.client.Client;
 import com.spring.rental.item.Item;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -91,6 +93,7 @@ public class Rental {
 
     @NonNull
     @Enumerated(EnumType.STRING)
+    @NotNull(message = "Status must not be empty")
     @Column(name = "status", nullable = false)
     private Status status;
 
@@ -119,6 +122,7 @@ public class Rental {
     private LocalDateTime canceledAt;
 
     @NonNull
+    @NotNull(message = "Declared end date must not be empty")
     @Column(name = "declared_end_date", nullable = false)
     private LocalDateTime declaredEndDate;
 
