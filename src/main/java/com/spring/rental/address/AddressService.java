@@ -33,9 +33,10 @@ public class AddressService {
 
     @Transactional
     public Address createAddress(AddressDTO addressDTO) {
-        Client client = clientRepository.findById(addressDTO.clientId()).orElseThrow(
-                () -> new NotFoundException("client", addressDTO.clientId())
-        );
+        Client client = clientRepository
+                .findById(addressDTO.clientId())
+                .orElseThrow(() -> new NotFoundException("client", addressDTO.clientId()));
+
         Address address = new Address(
                 client,
                 addressDTO.street(),

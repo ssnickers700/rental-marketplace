@@ -1,7 +1,7 @@
 package com.spring.rental.item;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.*;
+import com.spring.rental.category.Category;
 import com.spring.rental.client.Client;
 import com.spring.rental.rental.Rental;
 import jakarta.persistence.*;
@@ -24,6 +24,7 @@ import java.util.List;
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Table(name = "item")
 public class Item {
     @Id
@@ -40,6 +41,16 @@ public class Item {
             foreignKey = @ForeignKey(name = "client_item_user_id_fk")
     )
     private Client client;
+
+    @NonNull
+    @ManyToOne
+    @JoinColumn(
+            name = "category_id",
+            nullable = false,
+            referencedColumnName = "id",
+            foreignKey = @ForeignKey(name = "category_item_user_id_fk")
+    )
+    private Category category;
 
     @NonNull
     @NotBlank(message = "Title must not be empty")

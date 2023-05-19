@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 public record ItemDTO(
         Long clientId,
+        Long categoryId,
         String title,
         String description,
         BigDecimal basePrice,

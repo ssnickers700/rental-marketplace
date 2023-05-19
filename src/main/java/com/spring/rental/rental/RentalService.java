@@ -44,21 +44,26 @@ public class RentalService {
 
     @Transactional
     public Rental createRental(RentalDTO rentalDTO) {
-        Client renter = clientRepository.findById(rentalDTO.renterId()).orElseThrow(
-                () -> new NotFoundException("client", rentalDTO.renterId())
-        );
-        Client rentee = clientRepository.findById(rentalDTO.renteeId()).orElseThrow(
-                () -> new NotFoundException("client", rentalDTO.renteeId())
-        );
-        Address renterAddress = addressRepository.findById(rentalDTO.renterAddressId()).orElseThrow(
-                () -> new NotFoundException("address", rentalDTO.renterAddressId())
-        );
-        Address renteeAddress = addressRepository.findById(rentalDTO.renteeAddressId()).orElseThrow(
-                () -> new NotFoundException("address", rentalDTO.renteeId())
-        );
-        Item item = itemRepository.findById(rentalDTO.itemId()).orElseThrow(
-                () -> new NotFoundException("item", rentalDTO.itemId())
-        );
+        Client renter = clientRepository
+                .findById(rentalDTO.renterId())
+                .orElseThrow(() -> new NotFoundException("client", rentalDTO.renterId()));
+
+        Client rentee = clientRepository
+                .findById(rentalDTO.renteeId())
+                .orElseThrow(() -> new NotFoundException("client", rentalDTO.renteeId()));
+
+        Address renterAddress = addressRepository
+                .findById(rentalDTO.renterAddressId())
+                .orElseThrow(() -> new NotFoundException("address", rentalDTO.renterAddressId()));
+
+        Address renteeAddress = addressRepository.
+                findById(rentalDTO.renteeAddressId())
+                .orElseThrow(() -> new NotFoundException("address", rentalDTO.renteeId()));
+
+        Item item = itemRepository
+                .findById(rentalDTO.itemId())
+                .orElseThrow(() -> new NotFoundException("item", rentalDTO.itemId()));
+
         Rental rental = new Rental(
                 renter,
                 rentee,

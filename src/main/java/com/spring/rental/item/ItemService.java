@@ -1,5 +1,7 @@
 package com.spring.rental.item;
 
+import com.spring.rental.category.Category;
+import com.spring.rental.category.CategoryRepository;
 import com.spring.rental.client.Client;
 import com.spring.rental.client.ClientRepository;
 import com.spring.rental.exception.NotFoundException;
@@ -14,11 +16,13 @@ public class ItemService {
 
     private final ItemRepository itemRepository;
     private final ClientRepository clientRepository;
+    private final CategoryRepository categoryRepository;
 
     @Autowired
-    public ItemService(ItemRepository itemRepository, ClientRepository clientRepository) {
+    public ItemService(ItemRepository itemRepository, ClientRepository clientRepository, CategoryRepository categoryRepository) {
         this.itemRepository = itemRepository;
         this.clientRepository = clientRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public List<Item> getAllItems() {
@@ -32,11 +36,17 @@ public class ItemService {
 
     @Transactional
     public Item createItem(ItemDTO itemDTO) {
-        Client client = clientRepository.findById(itemDTO.clientId()).orElseThrow(
-                () -> new NotFoundException("client", itemDTO.clientId())
-        );
+        Client client = clientRepository
+                .findById(itemDTO.clientId())
+                .orElseThrow(() -> new NotFoundException("client", itemDTO.clientId()));
+
+        Category category = categoryRepository
+                .findById(itemDTO.categoryId())
+                .orElseThrow(() -> new NotFoundException("category", itemDTO.categoryId()));
+
         Item item = new Item(
                 client,
+                category,
                 itemDTO.title(),
                 itemDTO.description(),
                 itemDTO.state(),

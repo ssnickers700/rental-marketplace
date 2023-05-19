@@ -41,12 +41,12 @@ public class Address {
 
     @NonNull
     @NotBlank(message = "Street must not be empty")
-    @Column(nullable = false)
+    @Column(name = "street", nullable = false)
     private String street;
 
     @NonNull
     @NotBlank(message = "City must not be empty")
-    @Column(nullable = false)
+    @Column(name = "city", nullable = false)
     private String city;
 
     @NonNull

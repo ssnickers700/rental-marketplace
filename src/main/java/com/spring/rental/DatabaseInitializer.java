@@ -2,6 +2,8 @@ package com.spring.rental;
 
 import com.spring.rental.address.Address;
 import com.spring.rental.address.AddressRepository;
+import com.spring.rental.category.Category;
+import com.spring.rental.category.CategoryRepository;
 import com.spring.rental.client.Client;
 import com.spring.rental.client.ClientRepository;
 import com.spring.rental.client.Role;
@@ -42,11 +44,23 @@ public class DatabaseInitializer {
     }
 
     @Bean
-    CommandLineRunner commandLineRunnerItem(ItemRepository itemRepository, ClientRepository clientRepository) {
+    CommandLineRunner commandLineRunnerCategory(CategoryRepository categoryRepository) {
+        return args -> categoryRepository.saveAll(List.of(
+                        new Category("Gaming"),
+                        new Category("Garden"),
+                        new Category("Coffee machines"),
+                        new Category("Cameras"),
+                        new Category("Music")
+                )
+        );
+    }
+
+    @Bean
+    CommandLineRunner commandLineRunnerItem(ItemRepository itemRepository, ClientRepository clientRepository, CategoryRepository categoryRepository) {
         return args -> itemRepository.saveAll(List.of(
-                        new Item(clientRepository.findById(1L).orElseThrow(), "Playstation 5", "1tb ssd, physical drive", State.ACTIVE, BigDecimal.valueOf(700)),
-                        new Item(clientRepository.findById(2L).orElseThrow(), "Lawnmower Toro", "Got it 2 years ago and simply prefer scissors", State.ACTIVE, BigDecimal.valueOf(500)),
-                        new Item(clientRepository.findById(2L).orElseThrow(), "De'longhi coffee machine", "milk frother not working", State.INACTIVE, BigDecimal.valueOf(1000))
+                        new Item(clientRepository.findById(1L).orElseThrow(), categoryRepository.findById(1L).orElseThrow(), "Playstation 5", "1tb ssd, physical drive", State.ACTIVE, BigDecimal.valueOf(700)),
+                        new Item(clientRepository.findById(2L).orElseThrow(), categoryRepository.findById(2L).orElseThrow(), "Lawnmower Toro", "Got it 2 years ago and simply prefer scissors", State.ACTIVE, BigDecimal.valueOf(500)),
+                        new Item(clientRepository.findById(2L).orElseThrow(), categoryRepository.findById(3L).orElseThrow(), "De'longhi coffee machine", "milk frother not working", State.INACTIVE, BigDecimal.valueOf(1000))
                 )
         );
     }
