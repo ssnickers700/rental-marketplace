@@ -1,8 +1,10 @@
 package com.spring.rental.item;
 
 import com.fasterxml.jackson.annotation.*;
+import com.spring.rental.View;
 import com.spring.rental.category.Category;
 import com.spring.rental.client.Client;
+import com.spring.rental.itemprice.ItemPrice;
 import com.spring.rental.rental.Rental;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -79,6 +81,10 @@ public class Item {
     @JsonIgnore
     @OneToMany(mappedBy = "item", cascade = CascadeType.PERSIST)
     private List<Rental> rentals;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "item", cascade = CascadeType.PERSIST)
+    private List<ItemPrice> itemPrice;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @CreationTimestamp

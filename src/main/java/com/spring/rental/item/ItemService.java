@@ -5,6 +5,8 @@ import com.spring.rental.category.CategoryRepository;
 import com.spring.rental.client.Client;
 import com.spring.rental.client.ClientRepository;
 import com.spring.rental.exception.NotFoundException;
+import com.spring.rental.item.dto.ItemBaseDTO;
+import com.spring.rental.item.dto.ItemPayloadDTO;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,22 +37,22 @@ public class ItemService {
     }
 
     @Transactional
-    public Item createItem(ItemDTO itemDTO) {
+    public Item createItem(ItemPayloadDTO itemPayloadDTO) {
         Client client = clientRepository
-                .findById(itemDTO.clientId())
-                .orElseThrow(() -> new NotFoundException("client", itemDTO.clientId()));
+                .findById(itemPayloadDTO.getClientId())
+                .orElseThrow(() -> new NotFoundException("client", itemPayloadDTO.getClientId()));
 
         Category category = categoryRepository
-                .findById(itemDTO.categoryId())
-                .orElseThrow(() -> new NotFoundException("category", itemDTO.categoryId()));
+                .findById(itemPayloadDTO.getCategoryId())
+                .orElseThrow(() -> new NotFoundException("category", itemPayloadDTO.getCategoryId()));
 
         Item item = new Item(
                 client,
                 category,
-                itemDTO.title(),
-                itemDTO.description(),
-                itemDTO.state(),
-                itemDTO.basePrice()
+                itemPayloadDTO.getTitle(),
+                itemPayloadDTO.getDescription(),
+                itemPayloadDTO.getState(),
+                itemPayloadDTO.getBasePrice()
         );
         return itemRepository.save(item);
     }

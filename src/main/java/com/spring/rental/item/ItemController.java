@@ -1,5 +1,7 @@
 package com.spring.rental.item;
 
+import com.spring.rental.item.dto.ItemBaseDTO;
+import com.spring.rental.item.dto.ItemPayloadDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,8 +33,8 @@ public class ItemController {
     }
 
     @PostMapping
-    public ResponseEntity<Item> createItem(@RequestBody ItemDTO itemDTO) {
-        Item savedItem = itemService.createItem(itemDTO);
+    public ResponseEntity<Item> createItem(@RequestBody ItemPayloadDTO itemPayloadDTO) {
+        Item savedItem = itemService.createItem(itemPayloadDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedItem);
     }
 

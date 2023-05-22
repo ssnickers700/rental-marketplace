@@ -10,6 +10,8 @@ import com.spring.rental.client.Role;
 import com.spring.rental.item.Item;
 import com.spring.rental.item.ItemRepository;
 import com.spring.rental.item.State;
+import com.spring.rental.itemprice.ItemPrice;
+import com.spring.rental.itemprice.ItemPriceRepository;
 import com.spring.rental.rental.Rental;
 import com.spring.rental.rental.RentalRepository;
 import com.spring.rental.rental.Status;
@@ -66,12 +68,34 @@ public class DatabaseInitializer {
     }
 
     @Bean
-    CommandLineRunner commandLineRunnerRental(RentalRepository rentalRepository, ClientRepository clientRepository, AddressRepository addressRepository, ItemRepository itemRepository) {
+    CommandLineRunner commandLineRunnerItemPrice(ItemPriceRepository itemPriceRepository, ItemRepository itemRepository) {
+        return args -> itemPriceRepository.saveAll(List.of(
+                        new ItemPrice(itemRepository.findById(1L).orElseThrow(), 1, BigDecimal.valueOf(50)),
+                        new ItemPrice(itemRepository.findById(1L).orElseThrow(), 2, BigDecimal.valueOf(40)),
+                        new ItemPrice(itemRepository.findById(1L).orElseThrow(), 3, BigDecimal.valueOf(35)),
+                        new ItemPrice(itemRepository.findById(1L).orElseThrow(), 4, BigDecimal.valueOf(32)),
+                        new ItemPrice(itemRepository.findById(1L).orElseThrow(), 5, BigDecimal.valueOf(29)),
+                        new ItemPrice(itemRepository.findById(2L).orElseThrow(), 1, BigDecimal.valueOf(40)),
+                        new ItemPrice(itemRepository.findById(2L).orElseThrow(), 2, BigDecimal.valueOf(35)),
+                        new ItemPrice(itemRepository.findById(2L).orElseThrow(), 3, BigDecimal.valueOf(31)),
+                        new ItemPrice(itemRepository.findById(2L).orElseThrow(), 4, BigDecimal.valueOf(28)),
+                        new ItemPrice(itemRepository.findById(2L).orElseThrow(), 5, BigDecimal.valueOf(25)),
+                        new ItemPrice(itemRepository.findById(3L).orElseThrow(), 1, BigDecimal.valueOf(65)),
+                        new ItemPrice(itemRepository.findById(3L).orElseThrow(), 2, BigDecimal.valueOf(54)),
+                        new ItemPrice(itemRepository.findById(3L).orElseThrow(), 3, BigDecimal.valueOf(47)),
+                        new ItemPrice(itemRepository.findById(3L).orElseThrow(), 4, BigDecimal.valueOf(41)),
+                        new ItemPrice(itemRepository.findById(3L).orElseThrow(), 5, BigDecimal.valueOf(37))
+                )
+        );
+    }
+
+    @Bean
+    CommandLineRunner commandLineRunnerRental(RentalRepository rentalRepository, ClientRepository clientRepository, AddressRepository addressRepository, ItemRepository itemRepository, ItemPriceRepository itemPriceRepository) {
         return args -> rentalRepository.save(new Rental(
                 clientRepository.findById(1L).orElseThrow(),
                 clientRepository.findById(2L).orElseThrow(),
                 itemRepository.findById(1L).orElseThrow(),
-                1L,
+                itemPriceRepository.findById(1L).orElseThrow(),
                 addressRepository.findById(1L).orElseThrow(),
                 addressRepository.findById(2L).orElseThrow(),
                 Status.IN_PREPARATION,

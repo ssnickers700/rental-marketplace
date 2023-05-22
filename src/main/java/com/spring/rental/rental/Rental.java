@@ -7,6 +7,7 @@ import com.spring.rental.address.Address;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.spring.rental.client.Client;
 import com.spring.rental.item.Item;
+import com.spring.rental.itemprice.ItemPrice;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -66,8 +67,15 @@ public class Rental {
     private Item item;
 
     @NonNull
-    @Column(name = "item_price_id", nullable = false)
-    private Long itemPriceId;
+    @ManyToOne
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JoinColumn(
+            name = "item_price_id",
+            nullable = false,
+            referencedColumnName = "id",
+            foreignKey = @ForeignKey(name = "item_price_rental_id_fk")
+    )
+    private ItemPrice itemPrice;
 
     @NonNull
     @ManyToOne

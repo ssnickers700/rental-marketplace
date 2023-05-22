@@ -7,6 +7,8 @@ import com.spring.rental.client.ClientRepository;
 import com.spring.rental.exception.NotFoundException;
 import com.spring.rental.item.Item;
 import com.spring.rental.item.ItemRepository;
+import com.spring.rental.itemprice.ItemPrice;
+import com.spring.rental.itemprice.ItemPriceRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,17 +22,20 @@ public class RentalService {
     private final ClientRepository clientRepository;
     private final AddressRepository addressRepository;
     private final ItemRepository itemRepository;
+    private final ItemPriceRepository itemPriceRepository;
 
     @Autowired
     public RentalService(
             RentalRepository rentalRepository,
             ClientRepository clientRepository,
             AddressRepository addressRepository,
-            ItemRepository itemRepository) {
+            ItemRepository itemRepository,
+            ItemPriceRepository itemPriceRepository) {
         this.rentalRepository = rentalRepository;
         this.clientRepository = clientRepository;
         this.addressRepository = addressRepository;
         this.itemRepository = itemRepository;
+        this.itemPriceRepository = itemPriceRepository;
     }
 
     public List<Rental> getAllRentals() {
@@ -64,11 +69,15 @@ public class RentalService {
                 .findById(rentalDTO.itemId())
                 .orElseThrow(() -> new NotFoundException("item", rentalDTO.itemId()));
 
+        ItemPrice itemPrice = itemPriceRepository
+                .findById(rentalDTO.itemPriceId())
+                .orElseThrow(() -> new NotFoundException("item price", rentalDTO.itemId()));
+
         Rental rental = new Rental(
                 renter,
                 rentee,
                 item,
-                rentalDTO.itemPriceId(),
+                itemPrice,
                 renterAddress,
                 renteeAddress,
                 rentalDTO.status(),
