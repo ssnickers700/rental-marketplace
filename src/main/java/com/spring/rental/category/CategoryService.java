@@ -1,5 +1,6 @@
 package com.spring.rental.category;
 
+import com.spring.rental.category.dto.CategoryResponseDTO;
 import com.spring.rental.exception.NotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +19,11 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    public List<CategoryDTO> getAllCategories() {
+    public List<CategoryResponseDTO> getAllCategories() {
         return categoryRepository
                 .findAll()
                 .stream()
-                .map(category -> new CategoryDTO(category.getId(), category.getName()))
+                .map(category -> new CategoryResponseDTO(category.getName(), category.getId()))
                 .collect(Collectors.toList());
     }
 
@@ -36,13 +37,13 @@ public class CategoryService {
     }
 
     @Transactional
-    public CategoryDTO updateCategory(Long id, Category updatedCategory) {
+    public CategoryResponseDTO updateCategory(Long id, Category updatedCategory) {
         if (!categoryRepository.existsById(id)) {
             throw new NotFoundException("category", id);
         }
         updatedCategory.setId(id);
         categoryRepository.save(updatedCategory);
-        return new CategoryDTO(id, updatedCategory.getName());
+        return new CategoryResponseDTO(updatedCategory.getName(), id);
     }
 
     public void deleteCategory(Long id) {

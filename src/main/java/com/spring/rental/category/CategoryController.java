@@ -1,5 +1,6 @@
 package com.spring.rental.category;
 
+import com.spring.rental.category.dto.CategoryResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +21,8 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CategoryDTO>> getAllCategories() {
-        List<CategoryDTO> categories = categoryService.getAllCategories();
+    public ResponseEntity<List<CategoryResponseDTO>> getAllCategories() {
+        List<CategoryResponseDTO> categories = categoryService.getAllCategories();
         return ResponseEntity.ok(categories);
     }
 
@@ -38,8 +39,8 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CategoryDTO> updateCategory(@PathVariable Long id, @RequestBody Category updatedCategory) {
-        CategoryDTO savedCategory = categoryService.updateCategory(id, updatedCategory);
+    public ResponseEntity<CategoryResponseDTO> updateCategory(@PathVariable Long id, @RequestBody Category updatedCategory) {
+        CategoryResponseDTO savedCategory = categoryService.updateCategory(id, updatedCategory);
         return ResponseEntity.ok(savedCategory);
     }
 
